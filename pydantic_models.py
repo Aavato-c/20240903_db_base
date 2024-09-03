@@ -23,13 +23,9 @@ class DataItemCreate(DataItemBase):
 class DataItemReturn(BaseModel):
         id: UUID
         updated_at: float
-        soft_delete: False
         data_value_1: Optional[str] = None
         data_value_2: Optional[int] = None
         data_value_3: Optional[str] = None
-        
-        
-        model_config = ConfigDict(arbitrary_types_allowed=True, orm_mode=True)
             
 
 class DataItemUpdate(DataItemBase):
@@ -50,11 +46,8 @@ class AttributeOfDataItemCreate(AttributeOfDataItemBase):
 class AttributeOfDataItemReturn(BaseModel):
         id: UUID
         updated_at: float
-        soft_delete: False
         data_item_id: UUID
         attribute: Optional[str] = None
-        
-        model_config = ConfigDict(arbitrary_types_allowed=True, orm_mode=True)
 
 class AttributeOfDataItemUpdate(AttributeOfDataItemBase):
         updated_at: float = dt.datetime.now().timestamp()
