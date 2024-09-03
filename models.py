@@ -33,6 +33,7 @@ class DataItem(Base):
 
     soft_delete = Column(Boolean, default=False, nullable=False)
 
+    attributes = relationship('AttributeOfDataItem', backref='dataitem', lazy='dynamic')
 
     def __repr__(self):
         return {
@@ -40,6 +41,27 @@ class DataItem(Base):
             'data_value_1': self.data_value_1,
             'data_value_2': self.data_value_2,
             'data_value_3': self.data_value_3,
+            'updated_at': self.updated_at,
+            'soft_delete': self.soft_delete,
+        }
+    
+class AttributeOfDataItem(Base):
+    
+    __tablename__ = 'attributeofdataitem'
+    
+    id = Column(UUIDType(as_uuid=True), primary_key=True, default=uuid4)
+    updated_at = Column(REAL, default=dt.datetime.now().timestamp(), nullable=False)
+    
+    data_item_id = Column(UUIDType(as_uuid=True), ForeignKey('dataitem.id'), nullable=False)
+    attribute = Column(String, nullable=True)
+
+    soft_delete = Column(Boolean, default=False, nullable=False)
+    
+    def __repr__(self):
+        return {
+            'id': self.id,
+            'data_item_id': self.data_item_id,
+            'attribute': self.attribute,
             'updated_at': self.updated_at,
             'soft_delete': self.soft_delete,
         }
