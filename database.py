@@ -18,7 +18,12 @@ log.info("Database connection established")
 dotenv.load_dotenv()
 
 try:
-    SQL_DB_NAME = os.getenv("SQL_DB_NAME")
+    SQL_DB_NAME = os.getenv("SQLITE_DB_NAME")
+    if not SQL_DB_NAME:
+        dotenv.load_dotenv(".env.example")
+        SQL_DB_NAME = os.getenv("SQLITE_DB_NAME")
+        if not SQL_DB_NAME:
+            raise Exception("SQLITE_DB_NAME not set in .env or .env.example")
     SQLALCHEMY_DATABASE_URL = f"sqlite:///./{SQL_DB_NAME}.sqlite3"
 except Exception as e:
     log.error(f"Error loading environment variables: {e}")
