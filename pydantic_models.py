@@ -2,7 +2,7 @@ import datetime as dt
 from typing import Optional
 from uuid import uuid4, UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
  
 # ============================================================
@@ -13,6 +13,7 @@ class DataItemBase(BaseModel):
         data_value_2: Optional[int] = None
         data_value_3: Optional[str] = None
         soft_delete: Optional[bool] = False
+
 
 class DataItemCreate(DataItemBase):
         created_at: float = dt.datetime.now().timestamp()
@@ -27,8 +28,9 @@ class DataItemReturn(BaseModel):
         data_value_2: Optional[int] = None
         data_value_3: Optional[str] = None
         
-        class Config:
-            orm_mode = True
+        
+        model_config = ConfigDict(arbitrary_types_allowed=True, orm_mode=True)
+            
 
 class DataItemUpdate(DataItemBase):
         updated_at: float = dt.datetime.now().timestamp()
@@ -52,8 +54,7 @@ class AttributeOfDataItemReturn(BaseModel):
         data_item_id: UUID
         attribute: Optional[str] = None
         
-        class Config:
-            orm_mode = True
+        model_config = ConfigDict(arbitrary_types_allowed=True, orm_mode=True)
 
 class AttributeOfDataItemUpdate(AttributeOfDataItemBase):
         updated_at: float = dt.datetime.now().timestamp()
