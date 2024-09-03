@@ -34,6 +34,42 @@ def add_data_item(data: pm.DataItemCreate) -> dbm.DataItem:
             log.error(f"Error adding data item: {e}")
             db.rollback()
             raise e
+        
+def update_data_item(data_id: dbm.UUID, data: pm.DataItemUpdate) -> dbm.DataItem:
+    """
+    Update a data item in the database.
+    """
+    log.debug(f"Updating data item: {data}")
+    with get_db() as db:
+        try:
+            db.query(dbm.DataItem).filter(dbm.DataItem.id == data_id).update(data.model_dump())
+            db.commit()
+            data_item = db.query(dbm.DataItem).filter(dbm.DataItem.id == data_id).first()
+            return data_item
+        except IntegrityError as e:
+            log.error(f"Error updating data item: {e}")
+            db.rollback()
+            raise e
+
+        
+    
+def add_data_attribute(dataitem_id: dbm.UUID, attribute: pm.AttributeOfDataItemCreate) -> dbm.AttributeOfDataItem:
+    """
+    Add an attribute to a data item.
+    """
+    log.debug(f"Adding attribute to data item {dataitem_id}: {attribute}")
+    with get_db() as db:
+        try:
+            attribute = dbm.AttributeOfDataItem(data_item_id=dataitem_id, **attribute.model_dump())
+            db.add(attribute)
+            db.commit()
+            db.refresh(attribute)
+            return attribute
+        except IntegrityError as e:
+            log.error(f"Error adding attribute to data item: {e}")
+            db.rollback()
+            raise e
+
 def agnostic_remove_item(data_id: dbm.UUID) -> bool:
     """
     Remove a data item from the database.
