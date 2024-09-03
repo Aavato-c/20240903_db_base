@@ -10,8 +10,9 @@ from sqlalchemy.orm import sessionmaker, Session
 from models import Base
 
 
+
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
-log.basicConfig(level=log.INFO)
 log.info("Database connection established")
 
 dotenv.load_dotenv()
